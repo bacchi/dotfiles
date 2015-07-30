@@ -110,6 +110,9 @@ setopt hist_reduce_blanks
 # 補完候補が複数あるときに自動的に一覧表示する
 setopt auto_menu
  
+# コマンドのスペルチェックを行う
+setopt correct
+
 # 高機能なワイルドカード展開を使用する
 #setopt extended_glob
  
@@ -123,9 +126,11 @@ bindkey '^R' history-incremental-pattern-search-backward
 # エイリアス
  
 alias ll='ls -atl'
+ 
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+ 
 alias mkdir='mkdir -p'
  
 # sudo の後のコマンドでエイリアスを有効にする
@@ -157,10 +162,24 @@ case ${OSTYPE} in
         #Mac用の設定
         export CLICOLOR=1
         alias ls='ls -G -F'
+        alias mysql='/Applications/MAMP/Library/bin/mysql'
+        alias mysqldump='/Applications/MAMP/Library/bin/mysqldump'
+        export EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
+        alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+        alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+
         ;;
     linux*)
         #Linux用の設定
+        export LANG=ja_JP.UTF-8
         ;;
 esac
  
 # vim:set ft=zsh:
+
+export PATH="$PATH:$HOME/.rvm/bin:/usr/local/bin:$HOME/.plenv/bin" # Add RVM to PATH for scripting
+
+# RVM
+[ -s ${HOME}/.rvm/scripts/rvm ] && source ${HOME}/.rvm/scripts/rvm
+
+eval "$(plenv init -)"
