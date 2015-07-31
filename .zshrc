@@ -86,6 +86,7 @@ setopt auto_cd
  
 # cd したら自動的にpushdする
 setopt auto_pushd
+
 # 重複したディレクトリを追加しない
 setopt pushd_ignore_dups
  
@@ -160,18 +161,10 @@ fi
 case ${OSTYPE} in
     darwin*)
         #Mac用の設定
-        export CLICOLOR=1
-        alias ls='ls -G -F'
-        alias mysql='/Applications/MAMP/Library/bin/mysql'
-        alias mysqldump='/Applications/MAMP/Library/bin/mysqldump'
-        export EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
-        alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-        alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-
+				
         ;;
     linux*)
         #Linux用の設定
-        export LANG=ja_JP.UTF-8
         ;;
 esac
  
