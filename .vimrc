@@ -123,6 +123,8 @@ syntax on
 colorscheme molokai
 " 行番号の色
 highlight LineNr ctermfg=darkyellow
+" vimのヤンクをOSのクリップボードにコピーする
+set clipboard=unnamed,autoselect
 """"""""""""""""""""""""""""""
 
 " vimを立ち上げたときに、自動的にvim-indent-guidesをオンにする

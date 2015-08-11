@@ -396,8 +396,8 @@ endif
 set wildmenu
 set wildmode=longest,list,full
 
-"OSのクリップボードを使用する
-set clipboard+=unnamed
+"vimのヤンクをクリップボードにコピーする
+set clipboard=unnamed,autoselect
 
 "ターミナルでマウスを使用できるようにする
 set mouse=a
