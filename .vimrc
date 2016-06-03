@@ -50,6 +50,12 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 " less用のsyntaxハイライト
 NeoBundle 'KohPoll/vim-less'
 
+" neosnippetを入れる
+" https://github.com/Shougo/neosnippet.vim
+NeoBundle 'Shougo/neosnippet'
+" https://github.com/Shougo/neosnippet-snippets
+NeoBundle 'Shougo/neosnippet-snippets'
+
 call neobundle#end()
 
 " Required:
@@ -232,3 +238,64 @@ imap ( ()<LEFT>
 
 " filetypeの自動検出
 filetype on
+
+""""""""""""""""""""""""""""""
+" NeoSnippetの設定
+""""""""""""""""""""""""""""""
+" https://github.com/Shougo/neosnippet.vim
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
+""""""""""""""""""""""""""""""
+" vim-markdownの設定
+""""""""""""""""""""""""""""""
+" https://github.com/plasticboy/vim-markdown
+
+" Markdown形式の見出しを折りたためるようにする
+au FileType markdown setl foldmethod=expr foldexpr=FoldMarkdownHeading(v:lnum)
+
+function! FoldMarkdownHeading(lnum)
+    let line = getline(a:lnum)
+    let match = matchstr(line, '^\zs\(#\{1,6}\)\ze\s')
+    if len(match) <= 1
+        return '='
+    else
+        return '>' . (len(match) - 1)
+    endif
+endfunction
+
+""""""""""""""""""""""""""""""
+" trac用の設定
+""""""""""""""""""""""""""""""
+" 拡張子moin、tracのファイルはMoinMoinとして扱われるように設定
+au BufNewFile,BufRead *.moin setf moin
+au BufNewFile,BufRead *.trac setf moin
+
+" 各見出しをおりたためるようにする
+
+au FileType moin setl foldmethod=expr foldexpr=FoldMoinHeading(v:lnum)
+
+function! FoldMoinHeading(lnum)
+    let line = getline(a:lnum)
+    let match = matchstr(line, '^\zs\(=\{1,5}\)\ze\s\+.*\s\+\1\s*\(#.\+\)\=$')
+    if len(match) <= 1
+        return '='
+    else
+        return '>' . (len(match) - 1)
+    endif
+endfunction
