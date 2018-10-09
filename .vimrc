@@ -1,74 +1,10 @@
-" 挙動を vi 互換ではなく、vim のデフォルト設定にする
-set nocompatible
-
-" 一旦ファイルタイプ関連を無効化する
-filetype off
-
-""""""""""""""""""""""""""""""
-" プラグインのセットアップ
-""""""""""""""""""""""""""""""
-if has('vim_starting')
-  set nocompatible               " Be iMproved
-
-  " Required:
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
-
-" Required:
-call neobundle#begin(expand('~/.vim/bundle/'))
-
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" ファイルオープンを便利に
-NeoBundle 'Shougo/unite.vim'
-" Unite.vimで最近使ったファイルを表示できるようにする
-NeoBundle 'Shougo/neomru.vim'
-" ファイルをtree表示してくれる
-NeoBundle 'scrooloose/nerdtree'
-" Gitを便利に使う
-NeoBundle 'tpope/vim-fugitive'
-
-" Rails向けのコマンドを提供する
-" http://qiita.com/alpaca_taichou/items/ab2ad83ddbaf2f6ce7fb#vim-rails
-NeoBundle 'tpope/vim-rails'
-" Ruby向けにendを自動挿入してくれる
-NeoBundle 'tpope/vim-endwise'
-
-" コメントON/OFFを手軽に実行
-NeoBundle 'tomtom/tcomment_vim'
-" シングルクオートとダブルクオートの入れ替え等
-NeoBundle 'tpope/vim-surround'
-
-" インデントに色を付けて見やすくする
-NeoBundle 'nathanaelkane/vim-indent-guides'
-" ログファイルを色づけしてくれる
-NeoBundle 'vim-scripts/AnsiEsc.vim'
-" 行末の半角スペースを可視化
-NeoBundle 'bronson/vim-trailing-whitespace'
-" less用のsyntaxハイライト
-NeoBundle 'KohPoll/vim-less'
-
-" neosnippetを入れる
-" https://github.com/Shougo/neosnippet.vim
-NeoBundle 'Shougo/neosnippet'
-" https://github.com/Shougo/neosnippet-snippets
-NeoBundle 'Shougo/neosnippet-snippets'
-
-call neobundle#end()
-
-" Required:
-filetype plugin indent on
-
-" If there are uninstalled bundles found on startup,
-" this will conveniently prompt you to install them.
-NeoBundleCheck
-""""""""""""""""""""""""""""""
-
 """"""""""""""""""""""""""""""
 " 各種オプションの設定
 """"""""""""""""""""""""""""""
+" 挙動を vi 互換ではなく、vim のデフォルト設定にする
+set nocompatible
+" 一旦ファイルタイプ関連を無効化する
+filetype off
 " スワップファイル無効化
 set noswapfile
 " カーソルが何行目の何列目に置かれているかを表示する
@@ -131,13 +67,76 @@ colorscheme molokai
 highlight LineNr ctermfg=darkyellow
 " vimのヤンクをOSのクリップボードにコピーする
 set clipboard=unnamed,autoselect
-""""""""""""""""""""""""""""""
-
+" filetypeの自動検出
+filetype on
 " vimを立ち上げたときに、自動的にvim-indent-guidesをオンにする
 let g:indent_guides_enable_on_vim_startup = 1
 
 " grep検索の実行後にQuickFix Listを表示する
 autocmd QuickFixCmdPost *grep* cwindow
+""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""
+" プラグインのセットアップ
+""""""""""""""""""""""""""""""
+if has('vim_starting')
+  set nocompatible               " Be iMproved
+
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" ファイルオープンを便利に
+NeoBundle 'Shougo/unite.vim'
+" Unite.vimで最近使ったファイルを表示できるようにする
+NeoBundle 'Shougo/neomru.vim'
+" ファイルをtree表示してくれる
+NeoBundle 'scrooloose/nerdtree'
+" Gitを便利に使う
+NeoBundle 'tpope/vim-fugitive'
+
+" Rails向けのコマンドを提供する
+" http://qiita.com/alpaca_taichou/items/ab2ad83ddbaf2f6ce7fb#vim-rails
+NeoBundle 'tpope/vim-rails'
+" Ruby向けにendを自動挿入してくれる
+NeoBundle 'tpope/vim-endwise'
+
+" コメントON/OFFを手軽に実行
+NeoBundle 'tomtom/tcomment_vim'
+" シングルクオートとダブルクオートの入れ替え等
+NeoBundle 'tpope/vim-surround'
+
+" インデントに色を付けて見やすくする
+NeoBundle 'nathanaelkane/vim-indent-guides'
+" ログファイルを色づけしてくれる
+NeoBundle 'vim-scripts/AnsiEsc.vim'
+" 行末の半角スペースを可視化
+NeoBundle 'bronson/vim-trailing-whitespace'
+" less用のsyntaxハイライト
+NeoBundle 'KohPoll/vim-less'
+
+" neosnippetを入れる
+" https://github.com/Shougo/neosnippet.vim
+NeoBundle 'Shougo/neosnippet'
+" https://github.com/Shougo/neosnippet-snippets
+NeoBundle 'Shougo/neosnippet-snippets'
+
+call neobundle#end()
+
+" Required:
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""
 " Unit.vimの設定
@@ -236,9 +235,6 @@ imap [ []<LEFT>
 imap ( ()<LEFT>
 """"""""""""""""""""""""""""""
 
-" filetypeの自動検出
-filetype on
-
 """"""""""""""""""""""""""""""
 " NeoSnippetの設定
 """"""""""""""""""""""""""""""
@@ -260,6 +256,7 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 if has('conceal')
   set conceallevel=2 concealcursor=i
 endif
+""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""
 " vim-markdownの設定
@@ -278,6 +275,7 @@ function! FoldMarkdownHeading(lnum)
         return '>' . (len(match) - 1)
     endif
 endfunction
+""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""
 " trac用の設定
@@ -299,3 +297,13 @@ function! FoldMoinHeading(lnum)
         return '>' . (len(match) - 1)
     endif
 endfunction
+""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""
+" Python の設定
+""""""""""""""""""""""""""""""
+" jedi-vim
+NeoBundle 'davidhalter/jedi-vim'
+" docstringポップアップを無効化
+autocmd FileType python setlocal completeopt-=preview
+""""""""""""""""""""""""""""""
