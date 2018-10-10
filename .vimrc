@@ -62,6 +62,13 @@ set whichwrap=b,s,h,l,<,>,[,]
 " 構文毎に文字色を変化させる
 syntax on
 " カラースキーマの指定
+""""""""""""""""
+" $ mkdir ~/.vim
+" $ cd ~/.vim
+" $ mkdir colors
+" $ git clone https://github.com/tomasr/molokai
+" $ mv molokai/colors/molokai.vim ~/.vim/colors/
+""""""""""""""""
 colorscheme molokai
 " 行番号の色
 highlight LineNr ctermfg=darkyellow
