@@ -78,9 +78,10 @@ set clipboard=unnamed,autoselect
 filetype on
 " vimを立ち上げたときに、自動的にvim-indent-guidesをオンにする
 let g:indent_guides_enable_on_vim_startup = 1
-
 " grep検索の実行後にQuickFix Listを表示する
 autocmd QuickFixCmdPost *grep* cwindow
+" BS を有効に
+set backspace=indent,eol,start
 """"""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""
