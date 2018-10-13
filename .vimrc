@@ -82,6 +82,8 @@ let g:indent_guides_enable_on_vim_startup = 1
 autocmd QuickFixCmdPost *grep* cwindow
 " BS を有効に
 set backspace=indent,eol,start
+" docstringポップアップを無効化
+autocmd FileType python setlocal completeopt-=preview
 """"""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""
@@ -129,13 +131,13 @@ NeoBundle 'vim-scripts/AnsiEsc.vim'
 NeoBundle 'bronson/vim-trailing-whitespace'
 " less用のsyntaxハイライト
 NeoBundle 'KohPoll/vim-less'
-
 " neosnippetを入れる
 " https://github.com/Shougo/neosnippet.vim
 NeoBundle 'Shougo/neosnippet'
 " https://github.com/Shougo/neosnippet-snippets
 NeoBundle 'Shougo/neosnippet-snippets'
-
+" jedi-vim
+NeoBundle 'davidhalter/jedi-vim'
 call neobundle#end()
 
 " Required:
@@ -305,13 +307,4 @@ function! FoldMoinHeading(lnum)
         return '>' . (len(match) - 1)
     endif
 endfunction
-""""""""""""""""""""""""""""""
-
-""""""""""""""""""""""""""""""
-" Python の設定
-""""""""""""""""""""""""""""""
-" jedi-vim
-NeoBundle 'davidhalter/jedi-vim'
-" docstringポップアップを無効化
-autocmd FileType python setlocal completeopt-=preview
 """"""""""""""""""""""""""""""
