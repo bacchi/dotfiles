@@ -94,12 +94,12 @@ set smarttab
 set tabstop=2
 set shiftwidth=2
 set softtabstop=0
-set noexpandtab
+set expandtab
 
 "-------Look&Feel-----
 "TAB,EOFなどを可視化する
 set list
-set listchars=tab:>-,extends:<,trail:-,eol:<
+set listchars=tab:>-,extends:<,trail:-,eol:$
 
 "検索結果をハイライトする
 set hlsearch
@@ -220,18 +220,18 @@ filetype indent on
 nmap <UP> gk
 nmap <DOWN> gj
 vmap <UP> gk
-vmap <DOWN> gj
+	vmap <DOWN> gj
 
-"他のvimにviminfoを送る
-"http://nanasi.jp/articles/howto/editing/rviminfo.html
-nmap ,vw :vw<CR>
-nmap ,vr :vr<CR>
+	"他のvimにviminfoを送る
+	"http://nanasi.jp/articles/howto/editing/rviminfo.html
+	nmap ,vw :vw<CR>
+	nmap ,vr :vr<CR>
 
-"ZZは強制的に書き込む
-map ZZ :wq!<CR>
+	"ZZは強制的に書き込む
+	map ZZ :wq!<CR>
 
-"C-Lでawkを呼び出す
-nmap <C-C><C-L> :w !awk 'BEGIN{n=0}{n+=$1}END{print n}'
+	"C-Lでawkを呼び出す
+nmap <C-C><C-A> :w !awk 'BEGIN{n=0}{n+=$1}END{print n}'
 
 "C-P,C-Nでバッファ移動,C-Dでバッファ消去
 nmap <C-P> :bp<CR>
@@ -309,23 +309,34 @@ nmap <ESC><ESC> :noh<CR>
 
 "<TAB><TAB>でexpandtabをトグル
 function Tab_switch()
-    if &expandtab =='1'
-        set noexpandtab
-    else
-        set expandtab
-    endif
+  if &expandtab =='1'
+    set noexpandtab
+  else
+    set expandtab
+  endif
 endfunction
 nmap <TAB><TAB> :call Tab_switch()<CR>
 
 "<ESC>wでnowrapをトグル
 function Wrap_switch()
-    if &wrap =='1'
-        set nowrap
-    else
-        set wrap
-    endif
+  if &wrap =='1'
+    set nowrap
+  else
+    set wrap
+  endif
 endfunction
 nmap <ESC>w :call Wrap_switch()<CR>
+
+" Alt key を使えるようにする
+let c = 'a'
+while c <= 'z'
+  execute "set <M-" . c . ">=\e" . c
+  execute "imap \e" . c . " <M-" . c . ">"
+  execute "set <M-S-" . c . ">=\e" . toupper(c)
+  execute "imap \e" . toupper(c) . " <M-" . c . ">"
+  let c = nr2char(1+char2nr(c))
+endw
+set timeout ttimeoutlen=50
 
 "-------MENU-------
 "SSHを通してファイルオープン
@@ -333,152 +344,152 @@ menu User.Open.SCP.NonSprit :e! scp:///<LEFT>
 menu User.Open.SCP.VSprit :vsp<CR>:wincmd w<CR>:e! scp:///<LEFT>
 menu User.Open.SCP.Sprit :sp<CR>:wincmd w<CR>:e! scp:///<LEFT>
 "分割してファイルブラウザを起動
-menu User.Open.Explolr.NonSprit :vsp<CR>:wincmd w<CR>:e! ./<CR>
-menu User.Open.Explolr.VSprit :vsp<CR>:wincmd w<CR>:e! ./<CR>
-menu User.Open.Explolr.Sprit :sp<CR>:wincmd w<CR>:e! ./<CR>
-"各種VIMの記録情報を表示する
-menu User.Buffur.RegisterList :dis<CR>
-menu User.Buffur.BuffurList :ls<CR>
-menu User.Buffur.HistoryList :his<CR>
-menu User.Buffur.MarkList :marks<CR>
-menu User.Buffur.JumpList :jumps<CR>
-"エンコードを指定して再読み込み
-menu User.Encode.reload.SJIS :e ++enc=cp932<CR>
-menu User.Encode.reload.EUC :e ++enc=euc-jp<CR>
-menu User.Encode.reload.ISO :e ++enc=iso-2022-jp<CR>
-menu User.Encode.reload.UTF :e ++enc=utf-8<CR>
-"保存エンコードを指定
-menu User.Encode.convert.SJIS :set fenc=cp932<CR>
-menu User.Encode.convert.EUC :set fenc=euc-jp<CR>
-menu User.Encode.convert.ISO :set fenc=iso-2022-jp<CR>
-menu User.Encode.convert.UTF :set fenc=utf-8<CR>
-"フォーマットを指定して再読み込み
-menu User.Format.Unix :e ++ff=unix<CR>
-menu User.Format.Dos :e ++ff=dos<CR>
-menu User.Format.Mac :e ++ff=mac<CR>
-"行番号をファイルに挿入
-menu User.Global.No :%!awk '{print NR, $0}'<CR>
-"TABをSPACEに変換する
-menu User.Global.Space :set expandtab<CR>:retab<CR>
-"空白行を削除する
-menu User.Global.Delete :g/^$/d<CR>
-"カーソル上の単語を全体から検索し、別ウインドウで表示
-menu User.Cursor.Serch.Show [I
-menu User.Cursor.Serch.Top [i
-menu User.Cursor.Serch.Junp [<tab>
-"カーソル上のファイルのオープン
-menu User.Cursor.FileOpen gf
-"コピー、ペーストモード
-menu User.Cursor.Paste :call Indent()<CR>
-"全体置き換えモード
-menu User.Cursor.Replace :%s/
-"C-C,C-Rと同様
-menu User.Cursor.Delete yw:%v:<C-R>0
+	menu User.Open.Explolr.NonSprit :vsp<CR>:wincmd w<CR>:e! ./<CR>
+	menu User.Open.Explolr.VSprit :vsp<CR>:wincmd w<CR>:e! ./<CR>
+	menu User.Open.Explolr.Sprit :sp<CR>:wincmd w<CR>:e! ./<CR>
+	"各種VIMの記録情報を表示する
+	menu User.Buffur.RegisterList :dis<CR>
+	menu User.Buffur.BuffurList :ls<CR>
+	menu User.Buffur.HistoryList :his<CR>
+	menu User.Buffur.MarkList :marks<CR>
+	menu User.Buffur.JumpList :jumps<CR>
+	"エンコードを指定して再読み込み
+	menu User.Encode.reload.SJIS :e ++enc=cp932<CR>
+	menu User.Encode.reload.EUC :e ++enc=euc-jp<CR>
+	menu User.Encode.reload.ISO :e ++enc=iso-2022-jp<CR>
+	menu User.Encode.reload.UTF :e ++enc=utf-8<CR>
+	"保存エンコードを指定
+	menu User.Encode.convert.SJIS :set fenc=cp932<CR>
+	menu User.Encode.convert.EUC :set fenc=euc-jp<CR>
+	menu User.Encode.convert.ISO :set fenc=iso-2022-jp<CR>
+	menu User.Encode.convert.UTF :set fenc=utf-8<CR>
+	"フォーマットを指定して再読み込み
+	menu User.Format.Unix :e ++ff=unix<CR>
+	menu User.Format.Dos :e ++ff=dos<CR>
+	menu User.Format.Mac :e ++ff=mac<CR>
+	"行番号をファイルに挿入
+	menu User.Global.No :%!awk '{print NR, $0}'<CR>
+	"TABをSPACEに変換する
+	menu User.Global.Space :set expandtab<CR>:retab<CR>
+	"空白行を削除する
+	menu User.Global.Delete :g/^$/d<CR>
+	"カーソル上の単語を全体から検索し、別ウインドウで表示
+	menu User.Cursor.Serch.Show [I
+	menu User.Cursor.Serch.Top [i
+	menu User.Cursor.Serch.Junp [<tab>
+	"カーソル上のファイルのオープン
+	menu User.Cursor.FileOpen gf
+	"コピー、ペーストモード
+	menu User.Cursor.Paste :call Indent()<CR>
+	"全体置き換えモード
+	menu User.Cursor.Replace :%s/
+	"C-C,C-Rと同様
+	menu User.Cursor.Delete yw:%v:<C-R>0
 
-"CUI時にメニューをA-lで表示する
-set wildcharm=<TAB>
-if has('gui')
-    nmap <M-l> :emenu <TAB>
-else
-    nmap <ESC>l :emenu <TAB>
-endif
+	"CUI時にメニューをA-lで表示する
+	set wildcharm=<TAB>
+	if has('gui')
+			nmap <M-l> :emenu <TAB>
+	else
+			nmap <ESC>l :emenu <TAB>
+	endif
 
-"-------GUI--------
-"ワイルドメニューを使う
-set wildmenu
-set wildmode=longest,list,full
+	"-------GUI--------
+	"ワイルドメニューを使う
+	set wildmenu
+	set wildmode=longest,list,full
 
-"vimのヤンクをクリップボードにコピーする
-set clipboard=unnamed,autoselect
+	"vimのヤンクをクリップボードにコピーする
+	set clipboard=unnamed,autoselect
 
-"ターミナルでマウスを使用できるようにする
-set mouse=a
-set guioptions+=a
-set ttymouse=xterm2
+	"ターミナルでマウスを使用できるようにする
+	set mouse=a
+	set guioptions+=a
+	set ttymouse=xterm2
 
-if has('gui')
-    "ツールバーを消す
-    set guioptions=egLta
-    "既に開いているGVIMがあるときはそのVIMを前面にもってくる
-    runtime macros/editexisting.vim
-    "gp gyで+レジスタに入出力
-    nmap gd "+d
-    nmap gy "+y
-    nmap gp "+p
-    nmap gP "+P
-endif
+	if has('gui')
+			"ツールバーを消す
+			set guioptions=egLta
+			"既に開いているGVIMがあるときはそのVIMを前面にもってくる
+			runtime macros/editexisting.vim
+			"gp gyで+レジスタに入出力
+			nmap gd "+d
+			nmap gy "+y
+			nmap gp "+p
+			nmap gP "+P
+	endif
 
-"-------AutoCmd------
-"if has('unix')
-"   "CVSのコミットはSJISで行う
-"   autocmd BufRead /tmp/cvs* :set fileencoding=cp932
-"   "Muttから開いた編集はiso-2022-jpで行う
-"   autocmd BufRead ~/.mutt/tmp/* :set fileencoding=utf-8
-"   "w3mのフォームは改行コードDOSで編集
-"   autocmd BufRead ~/.w3m/w3mtmp* :set fileformat=dos
-"   "どのような言語でもペースト時自動インデントしない
-"   "autocmd BufRead * :set paste
-"endif
+	"-------AutoCmd------
+	"if has('unix')
+	"   "CVSのコミットはSJISで行う
+	"   autocmd BufRead /tmp/cvs* :set fileencoding=cp932
+	"   "Muttから開いた編集はiso-2022-jpで行う
+	"   autocmd BufRead ~/.mutt/tmp/* :set fileencoding=utf-8
+	"   "w3mのフォームは改行コードDOSで編集
+	"   autocmd BufRead ~/.w3m/w3mtmp* :set fileformat=dos
+	"   "どのような言語でもペースト時自動インデントしない
+	"   "autocmd BufRead * :set paste
+	"endif
 
 "-------VIM7以降--------
 "Tab操作
 if v:version >= 700
-    "15までタブを開く
-    set tabpagemax=15
-    "タブラインを常に表示する
-    "set showtabline=2
-    if has('unix')
-        nmap <ESC>t :tabnew<CR>
-        nmap <ESC>e :tabnew ./<CR>
-        nmap <ESC>n :tabn<CR>
-        nmap <ESC>p :tabp<CR>
-        nmap <ESC>o :tabo<CR>
-        nmap <ESC>d :tabd
-        if has('gui')
-            nmap <M-t> :tabnew<CR>
-            nmap <M-e> :tabnew ./<CR>
-            nmap <M-n> :tabn<CR>
-            nmap <M-p> :tabp<CR>
-            nmap <M-o> :tabo<CR>
-            nmap <M-d> :tabd
-        endif
-    elseif has('win32')
-        nmap <M-t> :tabnew<CR>
-        nmap <M-e> :tabnew ./<CR>
-        nmap <M-n> :tabn<CR>
-        nmap <M-p> :tabp<CR>
-        nmap <M-o> :tabo<CR>
-        nmap <M-d> :tabd
-    endif
+	"15までタブを開く
+	set tabpagemax=15
+	"タブラインを常に表示する
+	"set showtabline=2
+	if has('unix')
+		nmap <ESC>t :tabnew<CR>
+		nmap <ESC>e :tabnew ./<CR>
+		nmap <ESC>n :tabn<CR>
+		nmap <ESC>p :tabp<CR>
+		nmap <ESC>o :tabo<CR>
+		nmap <ESC>d :tabd
+		if has('gui')
+			nmap <M-t> :tabnew<CR>
+			nmap <M-e> :tabnew ./<CR>
+			nmap <M-n> :tabn<CR>
+			nmap <M-p> :tabp<CR>
+			nmap <M-o> :tabo<CR>
+			nmap <M-d> :tabd
+		endif
+	elseif has('win32')
+		nmap <M-t> :tabnew<CR>
+		nmap <M-e> :tabnew ./<CR>
+		nmap <M-n> :tabn<CR>
+		nmap <M-p> :tabp<CR>
+		nmap <M-o> :tabo<CR>
+		nmap <M-d> :tabd
+	endif
 endif
 
 "開いているバッファのディレクトリに移動
 if v:version >= 700
-    set autochdir
+		set autochdir
 endif
 
 "Vimを終了しても undo 履歴を復元する
 "http://vim-users.jp/2010/07/hack162/
 "if has('persistent_undo')
-    "set undodir=./.vimundo,~/.vimundo
-    "set undofile
+		"set undodir=./.vimundo,~/.vimundo
+		"set undofile
 "endif
 
 "Makeやgrepでcwindowを自動でひらくようにする
 if v:version >= 700
-    autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
-    autocmd QuickfixCmdPost l* lopen
-    "M-gでGrepする
-    if has('unix')
-        nmap <Esc>g :vimgrep  %<LEFT><LEFT>
-        nmap <Esc>f :cn<CR>
-        nmap <Esc>b :cp<CR>
-    elseif has('win32')
-        nmap <M-g> :vimgrep  %<LEFT><LEFT>
-        "M-P,Nで候補移動
-        nmap <M-f> :cn<CR>
-        nmap <M-b> :cp<CR>
-    endif
+	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
+	autocmd QuickfixCmdPost l* lopen
+	"M-gでGrepする
+	if has('unix')
+		nmap <Esc>g :vimgrep  %<LEFT><LEFT>
+		nmap <Esc>f :cn<CR>
+		nmap <Esc>b :cp<CR>
+	elseif has('win32')
+		nmap <M-g> :vimgrep  %<LEFT><LEFT>
+		"M-P,Nで候補移動
+		nmap <M-f> :cn<CR>
+		nmap <M-b> :cp<CR>
+	endif
 endif
 
 "-------拡張--------
@@ -497,47 +508,47 @@ autocmd BufReadPost * if line("'\"") > 0 && line ("'\"") <= line("$") | exe "nor
 
 "HEXエディタとしてvimを使う
 if has('unix')
-    augroup Binary
-        au!
-        au BufReadPre  *.bin let &bin=1
-        au BufReadPost *.bin if &bin | silent %!xxd -g 1
-        au BufReadPost *.bin set ft=xxd | endif
-        au BufWritePre *.bin if &bin | %!xxd -r
-        au BufWritePre *.bin endif
-        au BufWritePost *.bin if &bin | silent %!xxd -g 1
-        au BufWritePost *.bin set nomod | endif
-    augroup END
+	augroup Binary
+		au!
+		au BufReadPre  *.bin let &bin=1
+		au BufReadPost *.bin if &bin | silent %!xxd -g 1
+		au BufReadPost *.bin set ft=xxd | endif
+		au BufWritePre *.bin if &bin | %!xxd -r
+		au BufWritePre *.bin endif
+		au BufWritePost *.bin if &bin | silent %!xxd -g 1
+		au BufWritePost *.bin set nomod | endif
+	augroup END
 endif
 
 "C-C,C-Vでターミナルからコピーできる表示形式にする(関数使用)
 if has('unix')
-    function Indent_switch()
-        if &nu =='1'
-            set noai
-            set nolist
-            set nonu
-            set paste
-            set nocursorline
-        else
-            set ai
-            set list
-            set nu
-            set nopaste
-            set cursorline
-        endif
-    endfunction
-    nmap <C-C><C-V> :call Indent_switch()<CR>
+	function Indent_switch()
+		if &nu =='1'
+			set noai
+			set nolist
+			set nonu
+			set paste
+			set nocursorline
+		else
+			set ai
+			set list
+			set nu
+			set nopaste
+			set cursorline
+		endif
+	endfunction
+	nmap <C-C><C-V> :call Indent_switch()<CR>
 endif
 
 "SSH越しにファイルを編集する
 if has('unix')
-    function Scp_edit(svr)
-        vsp
-        wincmd w
-        let sv = "e scp://" . a:svr . "/../"
-        exec sv
-    endfunction
-    nmap ,ssh :call Scp_edit("")<LEFT><LEFT>
+	function Scp_edit(svr)
+		vsp
+		wincmd w
+		let sv = "e scp://" . a:svr . "/../"
+		exec sv
+	endfunction
+	nmap ,ssh :call Scp_edit("")<LEFT><LEFT>
 endif
 
 "挿入モードで",date",',time'で日付、時刻挿入
@@ -559,89 +570,89 @@ nmap <C-C>d :DiffOrig<CR>
 
 "-----Windowsのみ有効------
 if has('win32')
-    "フォント設定
-    set guifont=MS_Gothic:h9:cSHIFTJIS
-    "パスのセパレータを変更(\->/)
-    set shellslash
-    "ウインドウポジション、サイズの設定
-    winpos 9 6
-    set lines=73
-    set columns=110
-    "スペースの入ったファイル名も扱えるようにする
-    set isfname+=32
-    "ファイル保存ダイアログの初期ディレクトリをバッファのあるディレクトリにする
-    set browsedir=buffer
-    "カラーの設定
-    colorscheme pablo
-    "IME入力状態を規定にする(skkを使っているとき用)
-    set iminsert=2
-    set imsearch=0
-    "起動時デスクトップに移動
-    if isdirectory( $HOME . "/Desktop" )
-        cd $HOME/Desktop
-    elseif isdirectory( $HOME . "/デスクトップ" )
-        cd $HOME/デスクトップ
-    endif
+	"フォント設定
+	set guifont=MS_Gothic:h9:cSHIFTJIS
+	"パスのセパレータを変更(\->/)
+	set shellslash
+	"ウインドウポジション、サイズの設定
+	winpos 9 6
+	set lines=73
+	set columns=110
+	"スペースの入ったファイル名も扱えるようにする
+	set isfname+=32
+	"ファイル保存ダイアログの初期ディレクトリをバッファのあるディレクトリにする
+	set browsedir=buffer
+	"カラーの設定
+	colorscheme pablo
+	"IME入力状態を規定にする(skkを使っているとき用)
+	set iminsert=2
+	set imsearch=0
+	"起動時デスクトップに移動
+	if isdirectory( $HOME . "/Desktop" )
+		cd $HOME/Desktop
+	elseif isdirectory( $HOME . "/デスクトップ" )
+		cd $HOME/デスクトップ
+	endif
 endif
 
 "-----Macのみ有効------
 if has('gui_macvim')
-    "ウインドウポジション、サイズの設定
-    winpos 640 22
-    set isfname+=32
-    set lines=68
-    set columns=106
-    colorscheme murphy
-  set guifont=Menlo\ Regular:h10
-  set guifontwide=Menlo\ Regular:h10
-  "set guifont=Ricty\ Regular\ for\ Powerline:h11
+	"ウインドウポジション、サイズの設定
+	winpos 640 22
+	set isfname+=32
+	set lines=68
+	set columns=106
+	colorscheme murphy
+	set guifont=Menlo\ Regular:h10
+	set guifontwide=Menlo\ Regular:h10
+	"set guifont=Ricty\ Regular\ for\ Powerline:h11
   "set guifontwide=Ricty\ Regular\ for\ Powerline:h11
-    set imdisable
-    "set iminsert=2
-    "set imsearch=0
+  set imdisable
+  "set iminsert=2
+  "set imsearch=0
 endif
 
 "拡張属性を自動付与
 if has('mac')
-    autocmd BufWritePost *.txt
-        \ if &fenc=='utf-8' |
-        \ exec "silent !xattr -w com.apple.TextEncoding 'UTF-8;134217984' \"%\"" |
-        \ elseif &fenc=='euc-jp' |
-        \ exec "silent !xattr -w com.apple.TextEncoding 'EUC-JP;2361' \"%\"" |
-        \ elseif &fenc=='iso-2022-jp' |
-        \ exec "silent !xattr -w com.apple.TextEncoding 'ISO-2022-JP;2080' \"%\"" |
-        \ elseif &fenc=='cp932' |
-        \ exec "silent !xattr -w com.apple.TextEncoding 'SHIFT_JIS;2561' \"%\"" |
-        \ endif
+	autocmd BufWritePost *.txt
+	\ if &fenc=='utf-8' |
+			\ exec "silent !xattr -w com.apple.TextEncoding 'UTF-8;134217984' \"%\"" |
+			\ elseif &fenc=='euc-jp' |
+			\ exec "silent !xattr -w com.apple.TextEncoding 'EUC-JP;2361' \"%\"" |
+			\ elseif &fenc=='iso-2022-jp' |
+			\ exec "silent !xattr -w com.apple.TextEncoding 'ISO-2022-JP;2080' \"%\"" |
+			\ elseif &fenc=='cp932' |
+			\ exec "silent !xattr -w com.apple.TextEncoding 'SHIFT_JIS;2561' \"%\"" |
+	\ endif
 endif
 
 "-------Plugin--------
 "eskk.vim
 if has('unix') && isdirectory($HOME . '/.vim/bundle/eskk.vim')
-  let g:eskk#directory = "~/vim/skk"
-  let g:eskk#dictionary = { 'path': "~/.vim/skk/.skk-jisyo", 'sorted': 0, 'encoding': 'utf-8', }
-  let g:eskk#large_dictionary = { 'path': "~/.vim/skk/SKK-JISYO.L", 'sorted': 1, 'encoding': 'utf-8', }
+	let g:eskk#directory = "~/vim/skk"
+	let g:eskk#dictionary = { 'path': "~/.vim/skk/.skk-jisyo", 'sorted': 0, 'encoding': 'utf-8', }
+	let g:eskk#large_dictionary = { 'path': "~/.vim/skk/SKK-JISYO.L", 'sorted': 1, 'encoding': 'utf-8', }
 endif
 
 "Fuf系
 "http://vim.g.hatena.ne.jp/keyword/fuzzyfinder.vim
 if isdirectory($HOME . '/.vim/bundle/FuzzyFinder')
-  let g:fuf_modesDisable = ['mrucmd']
-    nmap fb :FufBuffer<CR>
-    nmap fF :FufFile<CR>
-    nmap ff :FufMruFile<CR>
-    nmap fl :FufChangeList<CR>
-    nmap fc :FufMruCmd<CR>
+	let g:fuf_modesDisable = ['mrucmd']
+		nmap fb :FufBuffer<CR>
+		nmap fF :FufFile<CR>
+		nmap ff :FufMruFile<CR>
+		nmap fl :FufChangeList<CR>
+		nmap fc :FufMruCmd<CR>
 endif
 
 """"""""""""""""""""""""""""""
 " プラグインのセットアップ
 """"""""""""""""""""""""""""""
 if has('vim_starting')
-  set nocompatible               " Be iMproved
+	set nocompatible               " Be iMproved
 
-  " Required:
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+	" Required:
+	set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 " Required:
@@ -684,8 +695,8 @@ call neobundle#end()
 
 "http://blog.ruedap.com/2011/02/02/vim-ruby-regexp-plugin-eregex
 if isdirectory($HOME . '/.vim/bundle/eregex.vim')
-    let g:eregex_default_enable = 0
-    nnoremap <leader>/ :call eregex#toggle()<CR>
+	let g:eregex_default_enable = 0
+	nnoremap <leader>/ :call eregex#toggle()<CR>
 endif
 
 "http://vim-users.jp/2009/09/hack77/
@@ -695,115 +706,114 @@ endif
 
 "neocomplcache
 if isdirectory($HOME . '/.vim/bundle/neocomplcache')
-    "https://github.com/Shougo/neocomplcache.vim
-    "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-    " Disable AutoComplPop.
-    let g:acp_enableAtStartup = 0
-    " Use neocomplcache.
-    let g:neocomplcache_enable_at_startup = 1
-    " Use smartcase.
-    let g:neocomplcache_enable_smart_case = 1
-    " Set minimum syntax keyword length.
-    let g:neocomplcache_min_syntax_length = 3
-    let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+	"https://github.com/Shougo/neocomplcache.vim
+	"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+	" Disable AutoComplPop.
+	let g:acp_enableAtStartup = 0
+	" Use neocomplcache.
+	let g:neocomplcache_enable_at_startup = 1
+	" Use smartcase.
+	let g:neocomplcache_enable_smart_case = 1
+	" Set minimum syntax keyword length.
+	let g:neocomplcache_min_syntax_length = 3
+	let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
-    " Enable heavy features.
-    " Use camel case completion.
-    "let g:neocomplcache_enable_camel_case_completion = 1
-    " Use underbar completion.
-    "let g:neocomplcache_enable_underbar_completion = 1
+	" Enable heavy features.
+	" Use camel case completion.
+	"let g:neocomplcache_enable_camel_case_completion = 1
+	" Use underbar completion.
+	"let g:neocomplcache_enable_underbar_completion = 1
 
-    " Define dictionary.
-    let g:neocomplcache_dictionary_filetype_lists = {
-        \ 'default' : '',
-        \ 'vimshell' : $HOME.'/.vimshell_hist',
-        \ 'scheme' : $HOME.'/.gosh_completions'
-            \ }
+	" Define dictionary.
+	let g:neocomplcache_dictionary_filetype_lists = {
+		\ 'default' : '',
+		\ 'vimshell' : $HOME.'/.vimshell_hist',
+		\ 'scheme' : $HOME.'/.gosh_completions'
+		\ }
 
-    " Define keyword.
-    if !exists('g:neocomplcache_keyword_patterns')
-        let g:neocomplcache_keyword_patterns = {}
-    endif
-    let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+	" Define keyword.
+	if !exists('g:neocomplcache_keyword_patterns')
+		et g:neocomplcache_keyword_patterns = {}
+	endif
+	let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
-    " Plugin key-mappings.
-    inoremap <expr><C-g>     neocomplcache#undo_completion()
-    inoremap <expr><C-l>     neocomplcache#complete_common_string()
+	" Plugin key-mappings.
+	inoremap <expr><C-g>     neocomplcache#undo_completion()
+	inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
-    " Recommended key-mappings.
-    " <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function()
-        return neocomplcache#smart_close_popup() . "\<CR>"
-        " For no inserting <CR> key.
-        "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-    endfunction
-    " <TAB>: completion.
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr><C-y>  neocomplcache#close_popup()
-    inoremap <expr><C-e>  neocomplcache#cancel_popup()
-    " Close popup by <Space>.
-    "inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+	" Recommended key-mappings.
+	" <CR>: close popup and save indent.
+	inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+	function! s:my_cr_function()
+		return neocomplcache#smart_close_popup() . "\<CR>"
+		" For no inserting <CR> key.
+		"return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+	endfunction
+	" <TAB>: completion.
+	inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+	" <C-h>, <BS>: close popup and delete backword char.
+	inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+	inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+	inoremap <expr><C-y>  neocomplcache#close_popup()
+	inoremap <expr><C-e>  neocomplcache#cancel_popup()
+	" Close popup by <Space>.
+	"inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
 
-    " For cursor moving in insert mode(Not recommended)
-    "inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
-    "inoremap <expr><Right> neocomplcache#close_popup() . "\<Right>"
-    "inoremap <expr><Up>    neocomplcache#close_popup() . "\<Up>"
-    "inoremap <expr><Down>  neocomplcache#close_popup() . "\<Down>"
-    " Or set this.
-    "let g:neocomplcache_enable_cursor_hold_i = 1
-    " Or set this.
-    "let g:neocomplcache_enable_insert_char_pre = 1
+	" For cursor moving in insert mode(Not recommended)
+	"inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
+	"inoremap <expr><Right> neocomplcache#close_popup() . "\<Right>"
+	"inoremap <expr><Up>    neocomplcache#close_popup() . "\<Up>"
+	"inoremap <expr><Down>  neocomplcache#close_popup() . "\<Down>"
+	" Or set this.
+	"let g:neocomplcache_enable_cursor_hold_i = 1
+	" Or set this.
+	"let g:neocomplcache_enable_insert_char_pre = 1
 
-    " AutoComplPop like behavior.
-    "let g:neocomplcache_enable_auto_select = 1
+	" AutoComplPop like behavior.
+	"let g:neocomplcache_enable_auto_select = 1
 
-    " Shell like behavior(not recommended).
-    "set completeopt+=longest
-    "let g:neocomplcache_enable_auto_select = 1
-    "let g:neocomplcache_disable_auto_complete = 1
-    "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+	" Shell like behavior(not recommended).
+	"set completeopt+=longest
+	"let g:neocomplcache_enable_auto_select = 1
+	"let g:neocomplcache_disable_auto_complete = 1
+	"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
-    " Enable omni completion.
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+	" Enable omni completion.
+	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+	autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+	autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-    " Enable heavy omni completion.
-    if !exists('g:neocomplcache_omni_patterns')
-        let g:neocomplcache_omni_patterns = {}
-    endif
-    let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-    let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-    let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+	" Enable heavy omni completion.
+	if !exists('g:neocomplcache_omni_patterns')
+		let g:neocomplcache_omni_patterns = {}
+	endif
+	let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+	let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+	let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-    " For perlomni.vim setting.
-    " https://github.com/c9s/perlomni.vim
-    let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+	" For perlomni.vim setting.
+	" https://github.com/c9s/perlomni.vim
+	let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 endif
 
 "Gitv
 "http://cohama.hateblo.jp/entry/20130517/1368806202
 if isdirectory($HOME . '/.vim/bundle/gitv')
-nmap ,g :Gitv --all<CR>
-    autocmd FileType git :setlocal foldlevel=99
-    autocmd FileType gitv call s:my_gitv_settings()
+	nmap ,g :Gitv --all<CR>
+	autocmd FileType git :setlocal foldlevel=99
+	autocmd FileType gitv call s:my_gitv_settings()
 
-    function! s:my_gitv_settings()
-        setlocal iskeyword+=/,-,.
-        nnoremap <silent><buffer> C :<C-u>Git checkout <C-r><C-w>
-        nnoremap <buffer> <Space>di :<C-u>Git diff <C-r><C-w><CR>
-        nnoremap <buffer> <Space>rb :<C-u>Git rebase <C-r><C-w>
-        nnoremap <buffer> <Space>R :<C-u>Git revert <C-r><C-w>
-        nnoremap <buffer> <Space>h :<C-u>Git cherry-pick <C-r><C-w>
-        nnoremap <buffer> <Space>rh :<C-u>Git reset --hard <C-r><C-w>
-    endfunction
-
+	function! s:my_gitv_settings()
+		setlocal iskeyword+=/,-,.
+		nnoremap <silent><buffer> C :<C-u>Git checkout <C-r><C-w>
+		nnoremap <buffer> <Space>di :<C-u>Git diff <C-r><C-w><CR>
+		nnoremap <buffer> <Space>rb :<C-u>Git rebase <C-r><C-w>
+		nnoremap <buffer> <Space>R :<C-u>Git revert <C-r><C-w>
+		nnoremap <buffer> <Space>h :<C-u>Git cherry-pick <C-r><C-w>
+		nnoremap <buffer> <Space>rh :<C-u>Git reset --hard <C-r><C-w>
+	endfunction
 endif
 
 " カラースキーマの指定
@@ -816,19 +826,19 @@ endif
 """"""""""""""""
 "ターミナルでも256色を用いてカラースキームを表示する
 if !has('gui_running') && filereadable($HOME . '/.vim/plugin/guicolorscheme.vim') && $TERM_PROGRAM ==# 'Apple_Terminal'
-    autocmd VimEnter * :GuiColorScheme badwolf
+	autocmd VimEnter * :GuiColorScheme badwolf
 elseif has('mac')
-    colorscheme molokai
+	colorscheme molokai
 endif
 
 """"""""""""""""""""""""""""""
 " NERDTree用の設定
 """"""""""""""""""""""""""""""
-map <C-l> :NERDTreeToggle<CR>
+map <C-C>l :NERDTreeToggle<CR>
 "autocmd vimenter * NERDTree
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
-  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
-  exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+	exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+	exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
 call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
 call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
