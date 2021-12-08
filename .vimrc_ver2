@@ -1,12 +1,4 @@
-:
 "-------基本設定--------
-"タイトルをバッファ名に変更しない
-set notitle
-set shortmess+=I
-
-"ターミナル接続を高速にする
-set ttyfast
-
 "ターミナルで256色表示を使う
 set t_Co=256
 
@@ -642,41 +634,53 @@ if isdirectory($HOME . '/.vim/bundle/FuzzyFinder')
     nmap fc :FufMruCmd<CR>
 endif
 
-"NeoBundle
-if isdirectory(expand('~/.vim/bundle/'))
-    if has('vim_starting')
-        set runtimepath+=~/.vim/bundle/neobundle.vim/
+""""""""""""""""""""""""""""""
+" プラグインのセットアップ
+""""""""""""""""""""""""""""""
+if has('vim_starting')
+  set nocompatible               " Be iMproved
 
-        call neobundle#rc(expand('~/.vim/bundle/'))
-
-        NeoBundleFetch 'Shougo/neobundle.vim'
-        NeoBundle 'Shougo/vimproc'
-
-        " My Bundles here:
-        NeoBundle 'tpope/vim-fugitive'
-        "Visual block mode時に$で問題有り
-    "NeoBundle 'alpaca-tc/alpaca_powertabline'
-    "NeoBundle 'Lokaltog/powerline' , { 'rtp' : 'powerline/bindings/vim'}
-        NeoBundle 'L9'
-    NeoBundle 'vim-scripts/FuzzyFinder.git'
-    "NeoBundle 'gregsexton/gitv'
-        "NeoBundle 'rails.vim'
-        NeoBundle 'vim-jp/vimdoc-ja.git'
-        NeoBundle 'tsaleh/vim-align'
-        "NeoBundle 'h1mesuke/vim-alignta'
-        "NeoBundle 'tyru/skk.vim'
-        "NeoBundle 'tyru/eskk.vim'
-        NeoBundle 'DrawIt'
-        NeoBundle 'guicolorscheme.vim'
-        NeoBundle 'flazz/vim-colorschemes'
-        "NeoBundle 'othree/eregex.vim'
-        "NeoBundle 'Shougo/neocomplcache'
-        NeoBundle 'tpope/vim-surround'
-
-        filetype plugin indent on
-        NeoBundleCheck
-    endif
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+"NeoBundle
+
+NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/vimproc'
+" My Bundles here:
+NeoBundle 'tpope/vim-fugitive'
+"Visual block mode時に$で問題有り
+"NeoBundle 'alpaca-tc/alpaca_powertabline'
+"NeoBundle 'Lokaltog/powerline' , { 'rtp' : 'powerline/bindings/vim'}
+NeoBundle 'L9'
+NeoBundle 'vim-scripts/FuzzyFinder.git'
+"NeoBundle 'gregsexton/gitv'
+"NeoBundle 'rails.vim'
+NeoBundle 'vim-jp/vimdoc-ja.git'
+NeoBundle 'tsaleh/vim-align'
+"NeoBundle 'h1mesuke/vim-alignta'
+"NeoBundle 'tyru/skk.vim'
+"NeoBundle 'tyru/eskk.vim'
+NeoBundle 'DrawIt'
+NeoBundle 'guicolorscheme.vim'
+NeoBundle 'flazz/vim-colorschemes'
+"NeoBundle 'othree/eregex.vim'
+"NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'davidhalter/jedi-vim'
+NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'bronson/vim-trailing-whitespace'
+filetype plugin indent on
+call neobundle#end()
 
 "http://blog.ruedap.com/2011/02/02/vim-ruby-regexp-plugin-eregex
 if isdirectory($HOME . '/.vim/bundle/eregex.vim')
@@ -802,11 +806,43 @@ nmap ,g :Gitv --all<CR>
 
 endif
 
+" カラースキーマの指定
+""""""""""""""""
+" $ mkdir ~/.vim
+" $ cd ~/.vim
+" $ mkdir colors
+" $ git clone https://github.com/tomasr/molokai
+" $ mv molokai/colors/molokai.vim ~/.vim/colors/
+""""""""""""""""
 "ターミナルでも256色を用いてカラースキームを表示する
 if !has('gui_running') && filereadable($HOME . '/.vim/plugin/guicolorscheme.vim') && $TERM_PROGRAM ==# 'Apple_Terminal'
     autocmd VimEnter * :GuiColorScheme badwolf
 elseif has('mac')
-    colorscheme badwolf
-else
-    colorscheme pablo
+    colorscheme molokai
 endif
+
+""""""""""""""""""""""""""""""
+" NERDTree用の設定
+""""""""""""""""""""""""""""""
+map <C-l> :NERDTreeToggle<CR>
+"autocmd vimenter * NERDTree
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+  exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable  = '?'
+let g:NERDTreeDirArrowCollapsible = '▼'
